@@ -1,0 +1,119 @@
+services:
+  backend:
+    image: bllxk/iceescape-backend:latest
+    container_name: iceescape-backend
+    # 生产环境不对外暴露端口，仅通过 frontend nginx 反代访问
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-iceescape}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-iceescape}
+      - DEBUG=false
+      - TRUST_PROXY_HEADERS=true
+      - FRONTEND_URL=https://${DOMAIN:-your-domain.com}
+      - XHS_API_URL=http://data-api:8001
+    volumes:
+      - ./uploads:/app/uploads
+      - ./saved_spots:/app/saved_spots
+      - ./cache:/app/cache
+      # 挂载 secrets 目录（和风天气私钥等敏感文件）
+      - ${SECRETS_DIR:-./secrets}:/app/secrets:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      data-api:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  frontend:
+    image: bllxk/iceescape-frontend:latest
+    container_name: iceescape-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # 挂载 SSL 证书（路径通过 .env 配置）
+      - ${SSL_CERT_PATH:-./ssl/cert.pem}:/etc/nginx/ssl/cert.pem:ro
+      - ${SSL_KEY_PATH:-./ssl/cert.key}:/etc/nginx/ssl/cert.key:ro
+      # 挂载生产环境 nginx 配置模板（通过 envsubst 替换变量后生效）
+      - ./nginx.prod.conf:/etc/nginx/templates/default.conf.template:ro
+    environment:
+      - DOMAIN=${DOMAIN:-your-domain.com}
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-kf", "https://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  data-api:
+    image: bllxk/mediacrawler-api:latest
+    container_name: iceescape-data-api
+    expose:
+      - "8001"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8001
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  db:
+    image: postgres:15-alpine
+    container_name: iceescape-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-iceescape}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-iceescape}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iceescape}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+volumes:
+  postgres_data:

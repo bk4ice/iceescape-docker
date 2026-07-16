@@ -1,0 +1,35 @@
+# 环境变量文件（包含敏感信息）
+.env
+.env.local
+.env.*.local
+
+# 上传文件目录（运行时数据）
+uploads/*
+!uploads/.gitkeep
+saved_spots/*
+!saved_spots/.gitkeep
+cache/*
+!cache/.gitkeep
+
+# SSL 证书目录（包含私钥，绝不提交）
+ssl/*
+!ssl/.gitkeep
+!ssl/README.md
+
+# Secrets 目录（包含和风天气私钥等，绝不提交）
+secrets/*
+!secrets/.gitkeep
+!secrets/README.md
+
+# Docker volumes 数据（Docker 自动管理，无需提交）
+
+# 临时文件
+*.log
+*.tmp
+*.tmp.txt
+containers_tmp.txt
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
