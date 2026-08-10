@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://iceescape.bk4ice.live">
-    <img src="docs/logo.png" width="240" alt="IceEscape Logo">
+    <img src="docs/logo.png" width="360" alt="IceEscape Logo">
   </a>
 </p>
 
