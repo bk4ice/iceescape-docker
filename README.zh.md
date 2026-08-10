@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://iceescape.bk4ice.live">🌐 在线体验</a> ·
+  <a href="#演示">🎬 演示</a> ·
   <a href="docs/screenshot.png">📸 截图</a> ·
   <a href="#快速开始">🚀 快速开始</a>
 </p>
@@ -34,7 +34,11 @@
 这个项目本来是为了帮我老婆整理旅行打卡点。后来发现很多朋友都在问“这是哪拍的”，干脆开源了。现在用 Docker 一条命令就能跑起来。
 
 <p align="center">
-  <img src="docs/screenshot.png" width="720" alt="IceEscape 点位页面">
+  <img src="docs/screenshot.png" width="720" alt="IceEscape spot page">
+</p>
+
+<p align="center">
+  <img src="docs/weather-light.png" width="720" alt="Weather and light planning">
 </p>
 
 ---

@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://iceescape.bk4ice.live">🌐 Live Demo</a> ·
+  <a href="#demo">🎬 Demo</a> ·
   <a href="docs/screenshot.png">📸 Screenshot</a> ·
   <a href="#quick-start">🚀 Quick Start</a>
 </p>
@@ -39,6 +39,10 @@ I started this to help my wife organize travel photo spots. More and more friend
 
 <p align="center">
   <img src="docs/screenshot.png" width="720" alt="IceEscape spot page">
+</p>
+
+<p align="center">
+  <img src="docs/weather-light.png" width="720" alt="Weather and light planning">
 </p>
 
 ---
