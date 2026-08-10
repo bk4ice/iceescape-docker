@@ -37,8 +37,6 @@
   <img src="docs/screenshot.png" width="720" alt="IceEscape spot page">
 </p>
 
-<p align="center">
-  <img src="docs/weather-light.png" width="720" alt="Weather and light planning">
 </p>
 
 ---
