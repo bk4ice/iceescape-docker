@@ -1,289 +1,182 @@
-# IceEscape Docker 快速启动
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/77676d1b-f9c9-4bc3-8bfa-270c2daad586" width="120" alt="IceEscape Logo">
+</p>
 
-通过 Docker Compose 快速部署 IceEscape 摄影点位管理平台。
+<h1 align="center">IceEscape</h1>
+<p align="center">摄影师的机位地图：坐标、光线、月相，一页查全</p>
 
-本项目使用预构建的 Docker 镜像，无需源代码即可启动。
+<p align="center">
+  <a href="https://iceescape.bk4ice.live">
+    <img src="https://img.shields.io/badge/在线体验-iceescape.bk4ice.live-blue?style=flat-square" alt="在线演示">
+  </a>
+  <a href="https://github.com/bk4ice/iceescape-docker/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/bk4ice/iceescape-docker?style=flat-square" alt="License">
+  </a>
+</p>
 
-## 环境要求
+<p align="center">
+  <a href="https://iceescape.bk4ice.live">🌐 在线体验</a> ·
+  <a href="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207">📸 截图</a> ·
+  <a href="#快速开始">🚀 快速开始</a>
+</p>
 
-- Docker 20.10+
-- Docker Compose 2.0+
-- 至少 2GB 可用内存
-- 至少 5GB 可用磁盘空间
+---
+
+## 一句话介绍
+
+刷到一张旅行照，我最想知道的从来不是滤镜，而是：这是在哪拍的？几点光线最好？带什么焦段？月亮会不会坏事？
+
+**IceEscape 把“机位”做成可搜索、可收藏的地点档案**：坐标、导航、最佳拍摄时段、日出日落、蓝调黄金时刻、月相月升月落、推荐焦段、构图参考，一页看全。
+
+**这个项目最初是为了帮我老婆完成旅行打卡任务的**，做着做着发现身边不少人都有同样需求……干脆开源了。现在用 Docker 一条命令就能跑起来。
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207" width="720" alt="IceEscape 点位页面">
+</p>
+
+---
+
+## 它解决什么问题
+
+| 以前的麻烦                         | IceEscape 的做法                     |
+| ---------------------------------- | ------------------------------------ |
+| 在评论区问“这是哪”没人回           | 地点档案直接显示坐标和导航           |
+| 收藏夹里照片堆成山，想找一张找不到 | 按城市、标签、关键词搜索             |
+| 到现场才发现光线已经没了           | 自动计算日出、日落、蓝调、黄金时段   |
+| 拍银河被月光毁掉                   | 每个机位显示月相、月升月落时间和方位 |
+| 出门才发现镜头带错                 | 焦段、构图建议提前写进档案           |
+| 团队整理城市打卡地图要手工录       | 支持批量导入结构化数据               |
+
+---
+
+## 核心亮点
+
+### 🌅 光线与月相规划
+
+不只是收藏地点，IceEscape 会根据机位坐标自动算出你真正需要的光线信息：
+
+- **日出日落、蓝调与黄金时段**：不用再切出去查第三方 App，打开档案就知道几点到最合适。
+- **月相、月升月落时间和方位**：拍银河、月升人像、城市夜景时，提前判断月光会不会干扰。
+- **天气与拍摄指数**：结合位置给出当天拍摄窗口参考。
+
+### 📍 地图 + 搜索
+
+打开地图就看到所有收录机位，支持按城市、标签、关键词检索。点开是一份完整档案。
+
+### 📄 一页看全
+
+样片、坐标、最佳时段、焦段建议、构图参考、注意事项集中展示，不用在地图、笔记、相册之间来回跳。
+
+### 🤖 AI 辅助
+
+上传一张样片，自动给出拍摄角度、镜头焦段和推荐时间。
+
+### 🛠️ 后台管理
+
+访问 `/admin` 管理地点、用户和权限。
+
+### 📥 批量导入
+
+把社交平台上的图文素材整理成结构化地点，省去大量手工录入。
+
+### 🐳 Docker 一键部署
+
+复制配置、填 Key、一条命令启动。
+
+---
+
+## 适合谁
+
+- 旅行前喜欢做“机位攻略”的摄影和旅行爱好者
+- 拍日出日落、银河、月升人像，需要提前规划光线的风光摄影师
+- 想整理城市、校园、景区打卡地图的小团队
+- 需要“地点 + 内容 + 地图”方案的开发者
+
+---
 
 ## 快速开始
 
-### 1. 克隆本仓库
+### 环境要求
+
+- Docker 20.10+
+- Docker Compose v2.0+
+- 至少 2 GB 内存 / 5 GB 磁盘空间
+- 地图服务 Key 和 AI 服务 Key（见 `.env.example`）
+
+### 1. 克隆并配置
 
 ```bash
 git clone https://github.com/bk4ice/iceescape-docker.git
 cd iceescape-docker
-```
-
-### 2. 配置环境变量
-
-```bash
-# 复制环境变量模板
 cp .env.example .env
-
-# 编辑 .env 文件，必须配置以下项：
-# - POSTGRES_PASSWORD  (数据库密码，请设置强密码)
-# - ADMIN_PASSWORD     (管理员密码，请设置强密码)
-# - SECRET_KEY         (JWT 密钥，使用 openssl rand -hex 32 生成)
-# - AMAP_KEY           (高德地图 API Key，申请地址: https://lbs.amap.com/)
-# - MODELS__PROVIDERS__ALIYUN__API_KEY (阿里云 DashScope API Key，申请地址: https://dashscope.aliyun.com/)
-#
-# 可选配置（按需开启）：
-# - QWEATHER_SUB / QWEATHER_KID  (和风天气凭证，需配合私钥文件)
-# - DOMAIN / SSL_CERT_PATH      (生产环境 HTTPS 域名和证书)
-# - MAP_PROFILE                 (地图提供商: amap 或 osm)
+# 按 .env.example 说明填写必填 Key
 ```
 
-### 3. 准备 Secrets 目录（可选）
-
-如果需要使用和风天气功能，请将和风天气的私钥文件放入 `secrets/` 目录：
-
-```bash
-cp /path/to/your-private-key.pem ./secrets/qweather_private_key.pem
-```
-
-详见 [secrets/README.md](secrets/README.md)。
-
-### 4. 启动服务
-
-**本地部署（HTTP，推荐快速体验）：**
-
-无需域名和 SSL 证书，直接启动：
+### 2. 启动
 
 ```bash
 docker compose up -d
 ```
 
-**生产环境（HTTPS，可选）：**
+访问 http://localhost:3000。
 
-如果需要对外公开访问，通过 Nginx 终端 SSL，后端端口不对外暴露。部署前需准备 SSL 证书和域名。
+### 3. 生产 HTTPS 部署
 
 ```bash
-# 1. 将 SSL 证书放入 ssl/ 目录
 mkdir -p ssl
-cp /path/to/your/cert.pem ssl/cert.pem
-cp /path/to/your/cert.key ssl/cert.key
-
-# 2. 确认 .env 中已配置域名和证书路径
-# DOMAIN=your-domain.com
-# SSL_CERT_PATH=./ssl/cert.pem
-# SSL_KEY_PATH=./ssl/cert.key
-
-# 3. 启动生产环境
+cp your-cert.pem ssl/cert.pem
+cp your-key.pem ssl/cert.key
+# 在 .env 中填写 DOMAIN、SSL_CERT_PATH、SSL_KEY_PATH
 docker compose -f docker-compose.prod.yml up -d
 ```
 
-### 5. 访问应用
+---
 
-- **本地部署：**
-  - 前端: http://localhost:3000
-  - 后端 API: http://localhost:8000
-  - API 文档: http://localhost:8000/docs
-- **生产环境（HTTPS）：**
-  - 前端: https://your-domain.com
-  - 后端 API: https://your-domain.com/api/v1（通过 Nginx 反代，端口 8000 不对外暴露）
-  - API 文档: 生产环境已关闭（DEBUG=false）
+## 演示
 
-### 6. 管理后台登录
+| 在线体验                                                       | 视频演示                                             |
+| -------------------------------------------------------------- | ---------------------------------------------------- |
+| [https://iceescape.bk4ice.live](https://iceescape.bk4ice.live) | [docs/iceescape_demo.mp4](./docs/iceescape_demo.mp4) |
 
-访问 `/admin` 路径进入管理后台，使用 `.env` 中配置的管理员账户登录：
+<p align="center">
+  <video src="https://raw.githubusercontent.com/bk4ice/iceescape-docker/main/docs/iceescape_demo.mp4" width="720" controls poster="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207"></video>
+</p>
 
-- 用户名：`.env` 中的 `ADMIN_USERNAME`（默认 `admin`）
-- 密码：`.env` 中的 `ADMIN_PASSWORD`
+---
 
-**注意：** 如果 `.env` 中未设置 `ADMIN_PASSWORD`，管理员登录将被禁用。
+## 当前状态
 
-## 目录结构
+可演示、可试用，核心流程已经跑通，但仍在持续优化中。欢迎体验，也欢迎 issue。
 
-```
-docker-quickstart/
-├── .env.example              # 环境变量模板
-├── .gitignore
-├── docker-compose.yml        # 开发环境（HTTP）
-├── docker-compose.prod.yml   # 生产环境（HTTPS）
-├── nginx.prod.conf           # 生产环境 Nginx 配置模板
-├── README.md
-├── secrets/                  # 敏感文件目录（和风天气私钥等）
-│   └── README.md
-├── ssl/                      # SSL 证书目录（生产环境使用）
-│   └── README.md
-├── uploads/                  # 上传文件（运行时自动创建）
-├── saved_spots/              # 收藏数据（运行时自动创建）
-└── cache/                    # 缓存数据（运行时自动创建）
-```
+**注意**：地图、AI 建议等功能需要配置高德地图 Key（国内） 和 AI 服务 Key，详见 `.env.example`。
 
-## 常用命令
+---
 
-### 查看服务状态
+## 常见问题
+
+**服务起不来？**
 
 ```bash
-docker compose ps
-```
-
-### 查看日志
-
-```bash
-# 查看所有服务日志
 docker compose logs -f
-
-# 查看特定服务日志
-docker compose logs -f backend
-docker compose logs -f frontend
-docker compose logs -f db
 ```
 
-### 重启服务
+**管理员无法登录？**  
+检查 `.env` 中 `ADMIN_PASSWORD` 是否已设置。
 
-```bash
-docker compose restart
-docker compose restart backend
-```
+**地图或 AI 建议不可用？**  
+检查 `.env` 中的地图 Key 和 AI Key 是否有效。
 
-### 停止服务
-
-```bash
-# 停止所有服务
-docker compose down
-
-# 停止并删除数据卷（慎用，会删除所有数据）
-docker compose down -v
-```
-
-### 更新服务
-
-```bash
-# 拉取最新镜像
-docker compose pull
-
-# 重新启动
-docker compose up -d
-```
-
-## 数据持久化
-
-项目使用 Docker volumes 持久化数据：
-
-- **数据库数据**：`postgres_data` 命名卷
-- **上传文件**：bind mount 到宿主机 `./uploads` 目录
-- **收藏数据**：bind mount 到宿主机 `./saved_spots` 目录
-- **缓存数据**：bind mount 到宿主机 `./cache` 目录
-
-容器重启后数据不会丢失。如需备份数据，请参考以下命令：
-
-### 数据库备份
-
-```bash
-# 备份 PostgreSQL 数据库
-docker compose exec db pg_dump -U iceescape iceescape > backup.sql
-
-# 恢复数据库
-docker compose exec -T db psql -U iceescape iceescape < backup.sql
-```
-
-### 文件备份
-
-```bash
-# 备份上传文件
-tar -czf uploads-backup.tar.gz uploads/
-
-# 备份收藏数据
-tar -czf saved-spots-backup.tar.gz saved_spots/
-```
-
-## 环境变量说明
-
-### 必须配置的变量
-
-| 变量名 | 说明 | 默认值 | 备注 |
-|--------|------|--------|------|
-| `POSTGRES_PASSWORD` | PostgreSQL 密码 | 无 | **必填**，请设置强密码 |
-| `ADMIN_PASSWORD` | 管理员密码 | 无 | **必填**，不设置则禁用管理员登录 |
-| `SECRET_KEY` | JWT 签名密钥 | 自动生成 | 生产环境建议显式设置 |
-| `AMAP_KEY` | 高德地图 API Key | 无 | 地图和地理编码功能必需 |
-| `MODELS__PROVIDERS__ALIYUN__API_KEY` | 阿里云 DashScope API Key | 无 | AI 智能体功能必需 |
-
-### 生产环境变量
-
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `DOMAIN` | 域名 | your-domain.com |
-| `SSL_CERT_PATH` | SSL 证书路径 | ./ssl/cert.pem |
-| `SSL_KEY_PATH` | SSL 私钥路径 | ./ssl/cert.key |
-| `TRUST_PROXY_HEADERS` | 信任反代头 | true |
-| `SECRETS_DIR` | Secrets 目录路径 | ./secrets |
-
-### 可选配置
-
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `QWEATHER_SUB` | 和风天气订阅 ID | 无 |
-| `QWEATHER_KID` | 和风天气 KID | 无 |
-| `QWEATHER_PRIVATE_KEY_PATH` | 和风天气私钥路径 | /app/secrets/qweather_private_key.pem |
-| `MAP_PROFILE` | 地图提供商 (`amap` 或 `osm`) | amap |
-| `RATE_LIMIT_ENABLED` | 启用限流 | true |
-| `SECURITY_HEADERS_ENABLED` | 启用安全响应头 | true |
-
-完整配置项请参考 `.env.example`。
-
-## 服务架构
-
-```
-用户浏览器 ──→ Nginx (frontend) ──→ 后端 API (backend)
-                    │                      │
-                    │                      ├──→ PostgreSQL (db)
-                    │                      └──→ 爬虫服务 (data-api)
-                    │
-                    └──→ 静态文件 (React SPA)
-```
-
-| 服务 | 镜像 | 端口(本地) | 说明 |
-|------|------|-----------|------|
-| frontend | `bllxk/iceescape-frontend:latest` | 3000 | Nginx + React SPA |
-| backend | `bllxk/iceescape-backend:latest` | 8000 | FastAPI 后端 |
-| data-api | `bllxk/mediacrawler-api:latest` | 8001 | 爬虫服务 |
-| db | `postgres:15-alpine` | 5432 | PostgreSQL 数据库 |
-
-## 故障排查
-
-### 服务无法启动
-
-1. 检查 Docker 是否正常运行：`docker ps`
-2. 检查端口是否被占用：`netstat -tuln | grep -E '3000|8000|5432'`
-3. 查看服务日志：`docker compose logs`
-
-### 数据库连接失败
-
-1. 检查数据库服务状态：`docker compose ps db`
-2. 检查环境变量配置：`docker compose config`
-3. 查看数据库日志：`docker compose logs db`
-
-### 前端无法访问后端
-
-1. 检查后端是否启动：`curl http://localhost:8000/health`
-2. 开发环境确认 `VITE_API_BASE_URL` 指向 `http://localhost:8000`
-3. 生产环境 `VITE_API_BASE_URL` 应为空（通过 Nginx 反代）
-4. 检查 CORS 配置：`FRONTEND_URL` 需与实际访问地址一致
-
-### 管理员无法登录
-
-1. 确认 `.env` 中 `ADMIN_PASSWORD` 已设置且非空
-2. 查看后端日志确认启动状态：`docker compose logs backend`
+---
 
 ## 安全建议
 
-1. **永远不要**将 `.env` 文件提交到版本控制
-2. **永远不要**将 `ssl/` 或 `secrets/` 目录中的文件提交到版本控制
-3. **定期更新** Docker 镜像：`docker compose pull && docker compose up -d`
-4. **使用强密码**（至少 16 位，包含大小写字母、数字和特殊字符）
-5. **限制网络访问**：生产环境使用防火墙，仅开放 80/443 端口
-6. **定期备份**：自动化数据库和文件备份
-7. **使用 HTTPS**：生产环境已内置 SSL 支持，将证书放入 `ssl/` 目录并通过 `docker-compose.prod.yml` 启动即可
+- 不要把 `.env`、`ssl/`、`secrets/` 里的真实文件提交到 Git
+- 生产环境只开放 80/443 端口
+- 定期备份数据库和上传目录
+- 使用强密码
+
+---
 
 ## 许可证
 
-MIT License
+[MIT License](./LICENSE)
