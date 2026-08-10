@@ -1,182 +1,189 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/77676d1b-f9c9-4bc3-8bfa-270c2daad586" width="120" alt="IceEscape Logo">
+  <a href="https://iceescape.bk4ice.live">
+    <img src="docs/logo.png" width="240" alt="IceEscape Logo">
+  </a>
 </p>
 
 <h1 align="center">IceEscape</h1>
-<p align="center">摄影师的机位地图：坐标、光线、月相，一页查全</p>
+<p align="center">A location scout map for photographers: coordinates, light, moon phase, all in one page.</p>
 
 <p align="center">
   <a href="https://iceescape.bk4ice.live">
-    <img src="https://img.shields.io/badge/在线体验-iceescape.bk4ice.live-blue?style=flat-square" alt="在线演示">
+    <img src="https://img.shields.io/badge/Live_Demo-iceescape.bk4ice.live-blue?style=flat-square" alt="Live Demo">
   </a>
   <a href="https://github.com/bk4ice/iceescape-docker/blob/main/LICENSE">
     <img src="https://img.shields.io/github/license/bk4ice/iceescape-docker?style=flat-square" alt="License">
   </a>
+  <a href="README.zh.md">🇨🇳 中文</a>
 </p>
 
 <p align="center">
-  <a href="https://iceescape.bk4ice.live">🌐 在线体验</a> ·
-  <a href="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207">📸 截图</a> ·
-  <a href="#快速开始">🚀 快速开始</a>
+  <a href="https://iceescape.bk4ice.live">🌐 Live Demo</a> ·
+  <a href="docs/screenshot.png">📸 Screenshot</a> ·
+  <a href="#quick-start">🚀 Quick Start</a>
 </p>
 
 ---
 
-## 一句话介绍
+## One-liner
 
-刷到一张旅行照，我最想知道的从来不是滤镜，而是：这是在哪拍的？几点光线最好？带什么焦段？月亮会不会坏事？
+When I see a great travel photo, I rarely care about the filter. What I want to know is:
 
-**IceEscape 把“机位”做成可搜索、可收藏的地点档案**：坐标、导航、最佳拍摄时段、日出日落、蓝调黄金时刻、月相月升月落、推荐焦段、构图参考，一页看全。
+> Where was this taken? What's the best light? Which focal length? Will the moon ruin the shot?
 
-**这个项目最初是为了帮我老婆完成旅行打卡任务的**，做着做着发现身边不少人都有同样需求……干脆开源了。现在用 Docker 一条命令就能跑起来。
+That info is usually buried in comments or missing entirely. IceEscape makes it simple:
+
+**A location archive built for photographers.** Every spot includes coordinates, navigation, best shooting times, sunrise/sunset, blue/golden hour, moon phase and position, recommended focal length, and composition notes — all on one page.
+
+I started this to help my wife organize travel photo spots. More and more friends started asking "where is this?", so I open-sourced it. Now you can run it with one Docker command.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207" width="720" alt="IceEscape 点位页面">
+  <img src="docs/screenshot.png" width="720" alt="IceEscape spot page">
 </p>
 
 ---
 
-## 它解决什么问题
+## What problem it solves
 
-| 以前的麻烦                         | IceEscape 的做法                     |
-| ---------------------------------- | ------------------------------------ |
-| 在评论区问“这是哪”没人回           | 地点档案直接显示坐标和导航           |
-| 收藏夹里照片堆成山，想找一张找不到 | 按城市、标签、关键词搜索             |
-| 到现场才发现光线已经没了           | 自动计算日出、日落、蓝调、黄金时段   |
-| 拍银河被月光毁掉                   | 每个机位显示月相、月升月落时间和方位 |
-| 出门才发现镜头带错                 | 焦段、构图建议提前写进档案           |
-| 团队整理城市打卡地图要手工录       | 支持批量导入结构化数据               |
-
----
-
-## 核心亮点
-
-### 🌅 光线与月相规划
-
-不只是收藏地点，IceEscape 会根据机位坐标自动算出你真正需要的光线信息：
-
-- **日出日落、蓝调与黄金时段**：不用再切出去查第三方 App，打开档案就知道几点到最合适。
-- **月相、月升月落时间和方位**：拍银河、月升人像、城市夜景时，提前判断月光会不会干扰。
-- **天气与拍摄指数**：结合位置给出当天拍摄窗口参考。
-
-### 📍 地图 + 搜索
-
-打开地图就看到所有收录机位，支持按城市、标签、关键词检索。点开是一份完整档案。
-
-### 📄 一页看全
-
-样片、坐标、最佳时段、焦段建议、构图参考、注意事项集中展示，不用在地图、笔记、相册之间来回跳。
-
-### 🤖 AI 辅助
-
-上传一张样片，自动给出拍摄角度、镜头焦段和推荐时间。
-
-### 🛠️ 后台管理
-
-访问 `/admin` 管理地点、用户和权限。
-
-### 📥 批量导入
-
-把社交平台上的图文素材整理成结构化地点，省去大量手工录入。
-
-### 🐳 Docker 一键部署
-
-复制配置、填 Key、一条命令启动。
+| The old way | With IceEscape |
+|-------------|----------------|
+| Asking "where is this?" in comments with no reply | Spot page shows coordinates and navigation |
+| Photo collections grow but become unsearchable | Search by city, tag, or keyword |
+| Arrive on location and the light is already gone | Auto sunrise, sunset, blue & golden hour times |
+| Milky-way plans ruined by moonlight | Each spot shows moon phase, moonrise, and moonset |
+| Bring the wrong lens | Focal length and composition notes are saved upfront |
+| Building a city photo map means manual data entry | Bulk import from social photo posts |
 
 ---
 
-## 适合谁
+## Key features
 
-- 旅行前喜欢做“机位攻略”的摄影和旅行爱好者
-- 拍日出日落、银河、月升人像，需要提前规划光线的风光摄影师
-- 想整理城市、校园、景区打卡地图的小团队
-- 需要“地点 + 内容 + 地图”方案的开发者
+### 🌅 Light & moon planning
+
+Not just pins on a map — IceEscape calculates the light data you actually need from each spot's coordinates:
+
+- **Sunrise, sunset, blue & golden hour**: no more switching to third-party apps; open the page and know exactly when to be there.
+- **Moon phase, moonrise & moonset**: plan Milky-way, moon-rise portraits, and city night shots without moonlight surprises.
+- **Weather & shootability index**: local shooting-window guidance at a glance.
+
+### 📍 Map + search
+
+Browse every spot on a map, filter by city, tag, or keyword. Click through to a full spot profile.
+
+### 📄 Everything on one page
+
+Sample photo, coordinates, best times, focal length, composition tips, and notes — no more jumping between maps, notes, and albums.
+
+### 🤖 AI assistant
+
+Upload a sample photo and get suggested angle, focal length, and timing.
+
+### 🛠️ Admin dashboard
+
+Visit `/admin` to manage spots, users, and permissions.
+
+### 📥 Bulk import
+
+Turn social photo posts into structured spots without typing everything by hand.
+
+### 🐳 One-command Docker deploy
+
+Copy the config, fill in a few keys, run one command.
 
 ---
 
-## 快速开始
+## Who is it for
 
-### 环境要求
+- Photographers and travelers who love planning "where was this taken" trips
+- Landscape shooters who need sunrise, sunset, Milky-way, and moon-rise planning
+- Small teams building city, campus, or scenic spot photo maps
+- Developers who need a ready-made "location + content + map" stack
+
+---
+
+## Quick start
+
+### Requirements
 
 - Docker 20.10+
 - Docker Compose v2.0+
-- 至少 2 GB 内存 / 5 GB 磁盘空间
-- 地图服务 Key 和 AI 服务 Key（见 `.env.example`）
+- At least 2 GB RAM / 5 GB disk
+- Map service key and AI service key (see `.env.example`)
 
-### 1. 克隆并配置
+### 1. Clone & configure
 
 ```bash
 git clone https://github.com/bk4ice/iceescape-docker.git
 cd iceescape-docker
 cp .env.example .env
-# 按 .env.example 说明填写必填 Key
+# Fill in the required keys following .env.example
 ```
 
-### 2. 启动
+### 2. Start
 
 ```bash
 docker compose up -d
 ```
 
-访问 http://localhost:3000。
+Visit http://localhost:3000.
 
-### 3. 生产 HTTPS 部署
+### 3. Production HTTPS deploy
 
 ```bash
 mkdir -p ssl
 cp your-cert.pem ssl/cert.pem
 cp your-key.pem ssl/cert.key
-# 在 .env 中填写 DOMAIN、SSL_CERT_PATH、SSL_KEY_PATH
+# Set DOMAIN, SSL_CERT_PATH, SSL_KEY_PATH in .env
 docker compose -f docker-compose.prod.yml up -d
 ```
 
 ---
 
-## 演示
+## Demo
 
-| 在线体验                                                       | 视频演示                                             |
-| -------------------------------------------------------------- | ---------------------------------------------------- |
-| [https://iceescape.bk4ice.live](https://iceescape.bk4ice.live) | [docs/iceescape_demo.mp4](./docs/iceescape_demo.mp4) |
+| Live Demo | Screenshot | Video |
+|-----------|------------|-------|
+| [iceescape.bk4ice.live](https://iceescape.bk4ice.live) | [docs/screenshot.png](docs/screenshot.png) | [docs/iceescape_demo.mp4](docs/iceescape_demo.mp4) |
 
 <p align="center">
-  <video src="https://raw.githubusercontent.com/bk4ice/iceescape-docker/main/docs/iceescape_demo.mp4" width="720" controls poster="https://github.com/user-attachments/assets/d48ce1e8-5295-46bd-9098-13516effc207"></video>
+  <video src="docs/iceescape_demo.mp4" width="720" controls poster="docs/screenshot.png"></video>
 </p>
 
 ---
 
-## 当前状态
+## Current status
 
-可演示、可试用，核心流程已经跑通，但仍在持续优化中。欢迎体验，也欢迎 issue。
+Live demo available, core workflows working, still under active improvement. Feedback and issues are welcome.
 
-**注意**：地图、AI 建议等功能需要配置高德地图 Key（国内） 和 AI 服务 Key，详见 `.env.example`。
+**Note**: Map and AI features require a map service key and an AI service key. See `.env.example` for details.
 
 ---
 
-## 常见问题
+## FAQ
 
-**服务起不来？**
+**Services won't start?**
 
 ```bash
 docker compose logs -f
 ```
 
-**管理员无法登录？**  
-检查 `.env` 中 `ADMIN_PASSWORD` 是否已设置。
+**Can't log into admin?**  
+Make sure `ADMIN_PASSWORD` is set in `.env`.
 
-**地图或 AI 建议不可用？**  
-检查 `.env` 中的地图 Key 和 AI Key 是否有效。
-
----
-
-## 安全建议
-
-- 不要把 `.env`、`ssl/`、`secrets/` 里的真实文件提交到 Git
-- 生产环境只开放 80/443 端口
-- 定期备份数据库和上传目录
-- 使用强密码
+**Map or AI features not working?**  
+Check that the map key and AI key in `.env` are valid.
 
 ---
 
-## 许可证
+## Security tips
+
+- Never commit `.env`, `ssl/`, `secrets/`, or real upload files to Git
+- In production, only expose ports 80/443
+- Back up the database and upload directories regularly
+- Use strong passwords
+
+---
+
+## License
 
 [MIT License](./LICENSE)
